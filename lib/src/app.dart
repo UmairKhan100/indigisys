@@ -2,17 +2,29 @@
 
 import 'package:flutter/material.dart';
 
+import './screens/login_screen.dart';
+import './blocs/login_provider.dart';
+
 class App extends StatelessWidget {
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Indigisys App',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('INDIGISYS'),
-          centerTitle: true,
-        ),
+    return LoginProvider(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        onGenerateRoute: routes,
+        title: 'Indigisys App',
       ),
+    );
+  }
+
+  Route routes(settings) {
+    final String url = settings.name.toString();
+
+    if (url == '/') {
+      return MaterialPageRoute(builder: (context) => LoginScreen());
+    }
+
+    return MaterialPageRoute(
+      builder: (context) => Scaffold(),
     );
   }
 }
