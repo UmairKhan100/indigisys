@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import './screens/login_screen.dart';
+import './screens/dashboard_screen.dart';
 import './blocs/login_provider.dart';
 
 class App extends StatelessWidget {
@@ -20,11 +21,19 @@ class App extends StatelessWidget {
     final String url = settings.name.toString();
 
     if (url == '/') {
-      return MaterialPageRoute(builder: (context) => LoginScreen());
-    }
+      return MaterialPageRoute(
+        builder: (context) => DashboardScreen(customerId: 3),
+      );
+    } else if (url.startsWith('/dashboard/')) {
+      final int customerId = int.parse(url.split('/dashboard/')[1]);
 
-    return MaterialPageRoute(
-      builder: (context) => Scaffold(),
-    );
+      return MaterialPageRoute(
+        builder: (context) => DashboardScreen(customerId: customerId),
+      );
+    } else {
+      return MaterialPageRoute(
+        builder: (context) => Scaffold(),
+      );
+    }
   }
 }

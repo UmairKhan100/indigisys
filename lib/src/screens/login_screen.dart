@@ -122,7 +122,7 @@ class LoginScreen extends StatelessWidget {
               passwordController.clear();
               bloc.changeEmail('');
               bloc.changePassword('');
-              Navigator.pushNamed(context, '/home');
+              Navigator.pushNamed(context, '/dashboard/${parsedJson["data"]}');
             }
           }
         },
