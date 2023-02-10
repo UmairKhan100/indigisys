@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, annotate_overrides, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
-import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../blocs/login_provider.dart';
@@ -89,41 +88,41 @@ class LoginScreen extends StatelessWidget {
     return Builder(builder: (context) {
       return ElevatedButton(
         onPressed: () async {
-          final response = await bloc.validate;
+          final parsedJson = await bloc.validate;
 
-          if (response != null && response.statusCode == 200) {
-            final parsedJson = json.decode(response.body);
-            print(parsedJson);
-
-            if (parsedJson['success'] == 'no') {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: Colors.red,
-                  content: Text(
-                    'Email or Password is incorrect!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18),
-                  ),
+          if (parsedJson['success'] == 'no') {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.red,
+                content: Text(
+                  parsedJson['error'],
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18),
                 ),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: Colors.green,
-                  content: Text(
-                    'Login Successful!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18),
-                  ),
+              ),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.green,
+                content: Text(
+                  'Login Successful!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18),
                 ),
-              );
+              ),
+            );
 
-              emailController.clear();
-              passwordController.clear();
-              bloc.changeEmail('');
-              bloc.changePassword('');
-              Navigator.pushNamed(context, '/dashboard/${parsedJson["data"]}');
-            }
+            emailController.clear();
+            passwordController.clear();
+            bloc.changeEmail('');
+            bloc.changePassword('');
+            final int customerId = parsedJson["data"][0];
+            final String customerName = parsedJson["data"][1];
+            Navigator.pushNamed(
+              context,
+              '/dashboard/$customerId/$customerName',
+            );
           }
         },
         child: Padding(

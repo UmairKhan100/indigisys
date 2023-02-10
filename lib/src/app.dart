@@ -4,31 +4,48 @@ import 'package:flutter/material.dart';
 
 import './screens/login_screen.dart';
 import './screens/dashboard_screen.dart';
+import './screens/location_screen.dart';
 import './blocs/login_provider.dart';
+import './blocs/app_provider.dart';
 
 class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return LoginProvider(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: routes,
-        title: 'Indigisys App',
+      child: AppProvider(
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          onGenerateRoute: routes,
+          title: 'Indigisys App',
+        ),
       ),
     );
   }
 
-  Route routes(settings) {
+  Route routes(RouteSettings settings) {
     final String url = settings.name.toString();
 
     if (url == '/') {
       return MaterialPageRoute(
-        builder: (context) => DashboardScreen(customerId: 3),
+        builder: (context) => LoginScreen(),
       );
-    } else if (url.startsWith('/dashboard/')) {
-      final int customerId = int.parse(url.split('/dashboard/')[1]);
+    } else if (url.startsWith('/dashboard')) {
+      final int customerId = int.parse(url.split('/')[2]);
+      final String customerName = url.split('/')[3];
 
       return MaterialPageRoute(
-        builder: (context) => DashboardScreen(customerId: customerId),
+        builder: (context) =>
+            DashboardScreen(customerId: customerId, customerName: customerName),
+      );
+    } else if (url.startsWith('/location')) {
+      return MaterialPageRoute(
+        builder: (context) {
+          final bloc = AppProvider.of(context);
+          final int customerId = int.parse(url.split('/')[2]);
+          final String customerName = url.split('/')[3];
+
+          bloc.fetchVehiclesLastPackets(customerId);
+          return LocationScreen(customerName: customerName);
+        },
       );
     } else {
       return MaterialPageRoute(

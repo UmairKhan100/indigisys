@@ -1,6 +1,8 @@
-import 'package:http/http.dart' show post;
+import '../resources/repository.dart';
 
 class LoginValidator {
+  final _repository = Repository();
+
   validator(email, password) async {
     String e = '';
     String p = '';
@@ -26,14 +28,7 @@ class LoginValidator {
     }
 
     if (e.isNotEmpty && p.isNotEmpty) {
-      final response = await post(
-        Uri.http(
-          '103.121.120.8:6000',
-          '/api/v2/login',
-          {'email': e, 'password': p},
-        ),
-      );
-      return response;
+      return _repository.checkEmailAndPassword(e, p);
     }
   }
 }
