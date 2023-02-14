@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import './screens/login_screen.dart';
 import './screens/dashboard_screen.dart';
 import './screens/location_screen.dart';
+import './screens/track_screen.dart';
 import './blocs/login_provider.dart';
 import './blocs/app_provider.dart';
 
@@ -27,6 +28,10 @@ class App extends StatelessWidget {
     if (url == '/') {
       return MaterialPageRoute(
         builder: (context) => LoginScreen(),
+        // DashboardScreen(
+        //   customerId: 3,
+        //   customerName: 'Usman Shahid',
+        // )
       );
     } else if (url.startsWith('/dashboard')) {
       final int customerId = int.parse(url.split('/')[2]);
@@ -41,10 +46,19 @@ class App extends StatelessWidget {
         builder: (context) {
           final bloc = AppProvider.of(context);
           final int customerId = int.parse(url.split('/')[2]);
-          final String customerName = url.split('/')[3];
 
           bloc.fetchVehiclesLastPackets(customerId);
-          return LocationScreen(customerName: customerName);
+          return LocationScreen();
+        },
+      );
+    } else if (url.startsWith('/track')) {
+      return MaterialPageRoute(
+        builder: (context) {
+          final bloc = AppProvider.of(context);
+          final int customerId = int.parse(url.split('/')[2]);
+
+          bloc.fetchVehicles(customerId);
+          return TrackScreen();
         },
       );
     } else {

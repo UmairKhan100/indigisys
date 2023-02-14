@@ -8,10 +8,6 @@ import 'package:latlong2/latlong.dart';
 import '../blocs/app_provider.dart';
 
 class LocationScreen extends StatelessWidget {
-  final String customerName;
-
-  LocationScreen({required this.customerName});
-
   Widget build(BuildContext context) {
     final bloc = AppProvider.of(context);
 
@@ -21,7 +17,7 @@ class LocationScreen extends StatelessWidget {
         if (!snapshot.hasData) {
           return Scaffold(
             appBar: AppBar(
-              title: Text(customerName),
+              title: Text('Current Location'),
               centerTitle: true,
             ),
           );
@@ -65,7 +61,7 @@ class LocationScreen extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(customerName.toString()),
+            title: Text('Current Location'),
             centerTitle: true,
           ),
           body: FlutterMap(

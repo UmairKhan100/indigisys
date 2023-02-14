@@ -11,7 +11,7 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('DASHBOARD'),
+        title: Text(customerName),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
@@ -48,7 +48,9 @@ class DashboardScreen extends StatelessWidget {
       return GestureDetector(
         onTap: () {
           if (index == 0) {
-            Navigator.pushNamed(context, '/location/$customerId/$customerName');
+            Navigator.pushNamed(context, '/location/$customerId');
+          } else if (index == 1) {
+            Navigator.pushNamed(context, '/track/$customerId');
           }
         },
         child: Card(

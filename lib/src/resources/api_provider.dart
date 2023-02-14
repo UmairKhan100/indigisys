@@ -15,6 +15,31 @@ class ApiProvider {
     return parsedJson;
   }
 
+  fetchTrack(int vehicleId, String tableName) async {
+    final response = await get(Uri.http(
+      '103.121.120.8:7000',
+      '/api/v1/fetchall',
+      {
+        'query':
+            'SELECT * FROM $tableName WHERE v_id=$vehicleId ORDER BY gps_time DESC',
+      },
+    ));
+
+    final parsedJson = json.decode(response.body.toString());
+    return parsedJson;
+  }
+
+  fetchVehicles(int customerId) async {
+    final response = await get(Uri.http(
+      '103.121.120.8:7000',
+      '/api/v2/vehicles/',
+      {'c_id': '$customerId'},
+    ));
+
+    final parsedJson = json.decode(response.body.toString());
+    return parsedJson;
+  }
+
   checkEmailAndPassword(String email, String password) async {
     final response = await post(
       Uri.http(

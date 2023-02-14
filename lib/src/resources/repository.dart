@@ -7,6 +7,14 @@ class Repository {
     return apiProvider.fetchVehiclesLastPackets(customerId);
   }
 
+  fetchTrack(int vehicleId, String tableName) {
+    return apiProvider.fetchTrack(vehicleId, tableName);
+  }
+
+  fetchVehicles(int customerId) {
+    return apiProvider.fetchVehicles(customerId);
+  }
+
   checkEmailAndPassword(String email, String password) {
     return apiProvider.checkEmailAndPassword(email, password);
   }
