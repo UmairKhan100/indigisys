@@ -51,6 +51,8 @@ class DashboardScreen extends StatelessWidget {
             Navigator.pushNamed(context, '/location/$customerId');
           } else if (index == 1) {
             Navigator.pushNamed(context, '/track/$customerId');
+          } else if (index == 2) {
+            Navigator.pushNamed(context, '/follow/$customerId');
           }
         },
         child: Card(

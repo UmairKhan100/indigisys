@@ -15,6 +15,10 @@ class Repository {
     return apiProvider.fetchVehicles(customerId);
   }
 
+  followVehicle(int vehicleId) {
+    return apiProvider.followVehicle(vehicleId);
+  }
+
   checkEmailAndPassword(String email, String password) {
     return apiProvider.checkEmailAndPassword(email, password);
   }

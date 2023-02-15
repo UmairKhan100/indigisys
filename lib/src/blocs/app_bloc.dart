@@ -7,10 +7,12 @@ class AppBloc {
   final _vehiclesLastPackets = BehaviorSubject();
   final _vehicleTrack = BehaviorSubject();
   final _vehicles = BehaviorSubject();
+  final _follow = BehaviorSubject();
 
   get vehiclesLastPackets => _vehiclesLastPackets.stream;
   get vehicleTrack => _vehicleTrack.stream;
   get vehicles => _vehicles.stream;
+  get follow => _follow.stream;
 
   fetchVehiclesLastPackets(int customerId) async {
     final lastPackets = await _repository.fetchVehiclesLastPackets(customerId);
@@ -25,5 +27,10 @@ class AppBloc {
   fetchVehicles(int customerId) async {
     final vehicles = await _repository.fetchVehicles(customerId);
     _vehicles.sink.add(vehicles);
+  }
+
+  followVehicle(int vehicleId) async {
+    final packet = await _repository.followVehicle(vehicleId);
+    _follow.sink.add(packet);
   }
 }
