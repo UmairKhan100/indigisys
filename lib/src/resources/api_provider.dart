@@ -6,7 +6,7 @@ class ApiProvider {
     final response = await get(
       Uri.http(
         '103.121.120.8:7000',
-        '/api/v2/last-packets/',
+        '/api/v2/last-packets',
         {'c_id': '$customerId'},
       ),
     );
@@ -20,8 +20,9 @@ class ApiProvider {
       '103.121.120.8:7000',
       '/api/v1/fetchall',
       {
-        'query': tableName,
-        // 'SELECT * FROM $tableName WHERE v_id=$vehicleId ORDER BY gps_time DESC',
+        'query':
+            'SELECT * FROM $tableName WHERE v_id=$vehicleId ORDER BY gps_time DESC',
+        // 'query': tableName,
       },
     ));
 
@@ -32,7 +33,18 @@ class ApiProvider {
   fetchVehicles(int customerId) async {
     final response = await get(Uri.http(
       '103.121.120.8:7000',
-      '/api/v2/vehicles/',
+      '/api/v2/vehicles',
+      {'c_id': '$customerId'},
+    ));
+
+    final parsedJson = json.decode(response.body.toString());
+    return parsedJson;
+  }
+
+  fetchStats(int customerId) async {
+    final response = await get(Uri.http(
+      '103.121.120.8:7000',
+      '/api/v2/stats',
       {'c_id': '$customerId'},
     ));
 

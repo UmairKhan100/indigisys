@@ -15,6 +15,10 @@ class Repository {
     return apiProvider.fetchVehicles(customerId);
   }
 
+  fetchStats(int customerId) {
+    return apiProvider.fetchStats(customerId);
+  }
+
   followVehicle(int vehicleId) {
     return apiProvider.followVehicle(vehicleId);
   }
