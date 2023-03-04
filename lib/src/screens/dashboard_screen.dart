@@ -1,14 +1,24 @@
-// ignore_for_file: use_key_in_widget_constructors, annotate_overrides, prefer_const_constructors, prefer_const_constructors_in_immutables
+// ignore_for_file: use_key_in_widget_constructors, annotate_overrides, prefer_const_constructors, prefer_const_constructors_in_immutables, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+
+import '../blocs/login_provider.dart';
+import '../utils/fcm.dart';
 
 class DashboardScreen extends StatelessWidget {
   final int customerId;
   final String customerName;
+  final String token;
+  final pushNotificationSystem = PushNotificationSystem();
 
-  DashboardScreen({required this.customerId, required this.customerName});
+  DashboardScreen(
+      {required this.customerId,
+      required this.customerName,
+      required this.token});
 
   Widget build(BuildContext context) {
+    pushNotificationSystem.whenNotificationReceived(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(customerName),
@@ -34,7 +44,7 @@ class DashboardScreen extends StatelessWidget {
             buildCard(
                 index: 3, icon: Icons.assessment_outlined, text: 'Analytics'),
             buildCard(
-                index: 4, icon: Icons.summarize_outlined, text: 'Reports'),
+                index: 4, icon: Icons.campaign_outlined, text: 'Notifications'),
             buildCard(index: 5, icon: Icons.logout_outlined, text: 'Logout'),
           ],
         ),
@@ -46,7 +56,7 @@ class DashboardScreen extends StatelessWidget {
       {required int index, required IconData icon, required String text}) {
     return Builder(builder: ((context) {
       return GestureDetector(
-        onTap: () {
+        onTap: () async {
           if (index == 0) {
             Navigator.pushNamed(context, '/location/$customerId');
           } else if (index == 1) {
@@ -55,6 +65,13 @@ class DashboardScreen extends StatelessWidget {
             Navigator.pushNamed(context, '/follow/$customerId');
           } else if (index == 3) {
             Navigator.pushNamed(context, '/analytics/$customerId');
+          } else if (index == 4) {
+            Navigator.pushNamed(context, '/notifications/$customerId');
+          } else if (index == 5) {
+            final bloc = LoginProvider.of(context);
+            await bloc.clearCustomer(customerId, token);
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/', (Route<dynamic> route) => false);
           }
         },
         child: Card(

@@ -16,8 +16,9 @@ late int vehicleId;
 final apiProvider = ApiProvider();
 
 test(bloc, packet, tableName, date, time) async {
-  final response = await apiProvider.fetchTrack(packet[0],
-      'SELECT * FROM $tableName WHERE v_id=$vehicleId and gps_time > TIMESTAMP("$date", "$time") ORDER BY gps_time');
+  final response = await apiProvider.fetchTrack(
+    'SELECT * FROM $tableName WHERE v_id=$vehicleId and gps_time > TIMESTAMP("$date", "$time") ORDER BY gps_time',
+  );
 
   final List newPackets = response['results'];
   if (newPackets.isNotEmpty) {
@@ -80,7 +81,6 @@ class FollowScreen extends StatelessWidget {
           Timer.periodic(
             Duration(seconds: 10),
             (timer) {
-              print(timer.tick);
               timer2 = timer;
               String date = gpsTime[0];
               String time = gpsTime[1].split('.')[0];
@@ -96,6 +96,7 @@ class FollowScreen extends StatelessWidget {
             ? Container()
             : FlutterMap(
                 options: MapOptions(
+                  center: points.last,
                   bounds: LatLngBounds.fromPoints(points),
                   boundsOptions: FitBoundsOptions(padding: EdgeInsets.all(140)),
                 ),
@@ -110,6 +111,16 @@ class FollowScreen extends StatelessWidget {
                           points: points, strokeWidth: 5, color: Colors.blue)
                     ],
                   ),
+                  MarkerLayer(
+                    markers: [
+                      Marker(
+                        point: points.last,
+                        builder: (context) {
+                          return Image.asset('images/car.png');
+                        },
+                      ),
+                    ],
+                  )
                 ],
               );
       },
@@ -150,7 +161,11 @@ class FollowScreen extends StatelessWidget {
                   SizedBox(width: 10),
                   Text(
                     'Select Vehicle',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey,
+                    ),
                   ),
                   SizedBox(width: 10),
                   Expanded(
@@ -194,7 +209,11 @@ class _DropdownExampleState extends State<DropdownExample> {
       iconSize: 24,
       elevation: 16,
       isExpanded: true,
-      style: TextStyle(color: Colors.blue, fontSize: 16),
+      style: TextStyle(
+        color: Colors.grey,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      ),
       underline: Container(
         height: 2,
         color: Colors.blue,

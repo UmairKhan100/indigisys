@@ -21,8 +21,8 @@ class AppBloc {
     _vehiclesLastPackets.sink.add(lastPackets);
   }
 
-  fetchTrack(int vehicleId, String tableName) async {
-    final track = await _repository.fetchTrack(vehicleId, tableName);
+  fetchTrack(String query) async {
+    final track = await _repository.fetchTrack(query);
     _vehicleTrack.sink.add(track);
   }
 

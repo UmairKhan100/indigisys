@@ -45,7 +45,14 @@ class TrackScreen extends StatelessWidget {
         }
 
         return points.isEmpty
-            ? Container()
+            ? Center(
+                child: Text(
+                'Nothing to display',
+                style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                    color: Colors.grey),
+              ))
             : FlutterMap(
                 options: MapOptions(
                   bounds: LatLngBounds.fromPoints(points),
@@ -61,7 +68,23 @@ class TrackScreen extends StatelessWidget {
                       Polyline(
                           points: points, strokeWidth: 5, color: Colors.blue)
                     ],
-                  )
+                  ),
+                  MarkerLayer(
+                    markers: [
+                      Marker(
+                        point: points.last,
+                        builder: (context) {
+                          return Image.asset('images/letter-a.png');
+                        },
+                      ),
+                      Marker(
+                        point: points.first,
+                        builder: (context) {
+                          return Image.asset('images/letter-b.png');
+                        },
+                      )
+                    ],
+                  ),
                 ],
               );
       },
@@ -102,7 +125,11 @@ class TrackScreen extends StatelessWidget {
                   SizedBox(width: 10),
                   Text(
                     'Select Vehicle',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey,
+                    ),
                   ),
                   SizedBox(width: 10),
                   Expanded(child: DropdownExample(vehicles: vehicles)),
@@ -125,7 +152,9 @@ class TrackScreen extends StatelessWidget {
                       if (datePicker != null) {
                         final String tableName =
                             'GPS_Packets_${datePicker.year}_${datePicker.month.toString().padLeft(2, "0")}_${datePicker.day.toString().padLeft(2, '0')}';
-                        bloc.fetchTrack(vehicleId, tableName);
+                        final String query =
+                            'SELECT * FROM $tableName WHERE v_id=$vehicleId ORDER BY gps_time DESC';
+                        bloc.fetchTrack(query);
                       }
                     },
                   ),
@@ -163,7 +192,11 @@ class _DropdownExampleState extends State<DropdownExample> {
       iconSize: 24,
       elevation: 16,
       isExpanded: true,
-      style: TextStyle(color: Colors.blue, fontSize: 16),
+      style: TextStyle(
+        color: Colors.grey,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      ),
       underline: Container(
         height: 2,
         color: Colors.blue,

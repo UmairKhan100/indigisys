@@ -62,6 +62,20 @@ class AnalyticsScreen extends StatelessWidget {
                   child:
                       buildCard(index: 3, text: 'Idle\n\n (${stats["idle"]}) '),
                 ),
+                StaggeredGridTile.fit(
+                  crossAxisCellCount: 2,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 20, bottom: 10),
+                    child: Text(
+                      'Alarms Report',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
               ],
             ),
           );

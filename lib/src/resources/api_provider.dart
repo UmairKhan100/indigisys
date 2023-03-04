@@ -15,15 +15,11 @@ class ApiProvider {
     return parsedJson;
   }
 
-  fetchTrack(int vehicleId, String tableName) async {
+  fetchTrack(String query) async {
     final response = await get(Uri.http(
       '103.121.120.8:7000',
       '/api/v1/fetchall',
-      {
-        'query':
-            'SELECT * FROM $tableName WHERE v_id=$vehicleId ORDER BY gps_time DESC',
-        // 'query': tableName,
-      },
+      {'query': query},
     ));
 
     final parsedJson = json.decode(response.body.toString());
@@ -76,6 +72,32 @@ class ApiProvider {
         '103.121.120.8:7000',
         '/api/v2/login',
         {'email': email, 'password': password},
+      ),
+    );
+
+    final parsedJson = json.decode(response.body.toString());
+    return parsedJson;
+  }
+
+  addCustomerToken(int customerId, String token) async {
+    final response = await get(
+      Uri.http(
+        '103.121.120.8:7000',
+        '/api/v2/add-fcm',
+        {'c_id': '$customerId', 'token': token},
+      ),
+    );
+
+    final parsedJson = json.decode(response.body.toString());
+    return parsedJson;
+  }
+
+  removeCustomerToken(int customerId, String token) async {
+    final response = await get(
+      Uri.http(
+        '103.121.120.8:7000',
+        '/api/v2/remove-fcm',
+        {'c_id': '$customerId', 'token': token},
       ),
     );
 

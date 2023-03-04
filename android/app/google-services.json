@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "419643349710",
+    "project_id": "indigisys-b7a4f",
+    "storage_bucket": "indigisys-b7a4f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419643349710:android:b1c5e85102e59c2d1c4e9f",
+        "android_client_info": {
+          "package_name": "com.umair.indigisys_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "419643349710-4imab2keb6ephmabsug6bvok0barm2vt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKsZYISUQ8nnPCsf0VQoffYah4IsmwXgM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419643349710-4imab2keb6ephmabsug6bvok0barm2vt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

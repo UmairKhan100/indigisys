@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import '../blocs/login_provider.dart';
+import '../utils/fcm.dart';
 
 class LoginScreen extends StatelessWidget {
   final emailController = TextEditingController();
@@ -12,22 +13,53 @@ class LoginScreen extends StatelessWidget {
     final bloc = LoginProvider.of(context);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('INDIGISYS'),
         centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            buildEmailField(bloc),
-            Container(margin: const EdgeInsets.only(top: 12)),
-            buildPasswordField(bloc),
-            Container(margin: const EdgeInsets.only(top: 24)),
-            buildSubmitButton(bloc),
-          ],
-        ),
+      body: StreamBuilder(
+        stream: bloc.customer,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          final customer = snapshot.data;
+          if (customer['id'] != 0) {
+            Future.delayed(Duration(seconds: 0), () {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/dashboard/${customer["id"]}/${customer["name"]}/${customer["token"]}',
+                ModalRoute.withName(
+                  '/dashboard/${customer["id"]}/${customer["name"]}/${customer["token"]}',
+                ),
+              );
+            });
+            return Container();
+          } else {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(32),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(margin: const EdgeInsets.only(top: 36)),
+                    Image.asset('images/logo.png', scale: 1.5),
+                    Container(margin: const EdgeInsets.only(top: 36)),
+                    buildEmailField(bloc),
+                    Container(margin: const EdgeInsets.only(top: 12)),
+                    buildPasswordField(bloc),
+                    Container(margin: const EdgeInsets.only(top: 24)),
+                    buildSubmitButton(bloc),
+                  ],
+                ),
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -35,7 +67,7 @@ class LoginScreen extends StatelessWidget {
   Widget buildEmailField(LoginBloc bloc) {
     return StreamBuilder(
       stream: bloc.email,
-      builder: ((context, AsyncSnapshot<String> snapshot) {
+      builder: (context, AsyncSnapshot<String> snapshot) {
         return TextField(
           controller: emailController,
           keyboardType: TextInputType.emailAddress,
@@ -54,7 +86,7 @@ class LoginScreen extends StatelessWidget {
             ),
           ),
         );
-      }),
+      },
     );
   }
 
@@ -117,11 +149,20 @@ class LoginScreen extends StatelessWidget {
             passwordController.clear();
             bloc.changeEmail('');
             bloc.changePassword('');
+
+            final pushNotificationSystem = PushNotificationSystem();
+            final token =
+                await pushNotificationSystem.generateDeviceRecognitionToken();
+
             final int customerId = parsedJson["data"][0];
             final String customerName = parsedJson["data"][1];
-            Navigator.pushNamed(
+            await bloc.addCustomer(customerId, customerName, token);
+            Navigator.pushNamedAndRemoveUntil(
               context,
-              '/dashboard/$customerId/$customerName',
+              '/dashboard/$customerId/$customerName/$token',
+              ModalRoute.withName(
+                '/dashboard/$customerId/$customerName/$token',
+              ),
             );
           }
         },

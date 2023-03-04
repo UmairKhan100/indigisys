@@ -8,6 +8,7 @@ import './screens/location_screen.dart';
 import './screens/track_screen.dart';
 import './screens/follow_screen.dart';
 import './screens/analytics_screen.dart';
+import './screens/notifications_screen.dart';
 import './blocs/login_provider.dart';
 import './blocs/app_provider.dart';
 
@@ -29,19 +30,20 @@ class App extends StatelessWidget {
 
     if (url == '/') {
       return MaterialPageRoute(
-        builder: (context) => DashboardScreen(
-          customerId: 1,
-          customerName: 'Umair Khan',
-        ),
-        // LoginScreen(),
+        builder: (context) {
+          final bloc = LoginProvider.of(context);
+          bloc.fetchCustomer();
+          return LoginScreen();
+        },
       );
     } else if (url.startsWith('/dashboard')) {
       final int customerId = int.parse(url.split('/')[2]);
       final String customerName = url.split('/')[3];
+      final String token = url.split('/')[4];
 
       return MaterialPageRoute(
-        builder: (context) =>
-            DashboardScreen(customerId: customerId, customerName: customerName),
+        builder: (context) => DashboardScreen(
+            customerId: customerId, customerName: customerName, token: token),
       );
     } else if (url.startsWith('/location')) {
       return MaterialPageRoute(
@@ -71,6 +73,16 @@ class App extends StatelessWidget {
 
           bloc.fetchVehicles(customerId);
           return FollowScreen();
+        },
+      );
+    } else if (url.startsWith('/notifications')) {
+      return MaterialPageRoute(
+        builder: (context) {
+          // final bloc = AppProvider.of(context);
+          // final int customerId = int.parse(url.split('/')[2]);
+          // bloc.fetchNotifications(customerId);
+
+          return NotificationScreen();
         },
       );
     } else if (url.startsWith('/analytics')) {

@@ -20,6 +20,7 @@ class LocationScreen extends StatelessWidget {
               title: Text('Current Location'),
               centerTitle: true,
             ),
+            body: Center(child: CircularProgressIndicator()),
           );
         }
 
@@ -35,11 +36,13 @@ class LocationScreen extends StatelessWidget {
             points.add(point);
             markers.add(
               Marker(
+                height: 80,
+                width: 40,
                 point: point,
                 builder: (context) {
                   return PopupMenuButton(
                     padding: EdgeInsets.zero,
-                    icon: Icon(Icons.room, color: Colors.blue),
+                    icon: Image.asset('images/car.png'),
                     itemBuilder: (context) {
                       return [
                         PopupMenuItem(
@@ -51,7 +54,6 @@ class LocationScreen extends StatelessWidget {
                         PopupMenuItem(child: Text('Address: ${element[5]}')),
                       ];
                     },
-                    iconSize: 48,
                   );
                 },
               ),
